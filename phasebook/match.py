@@ -19,9 +19,7 @@ def match(match_id):
     return {"message": msg, "elapsedTime": end - start}, 200
 
 
-def is_match(fave_numbers_1, fave_numbers_2):
-    for number in fave_numbers_2:
-        if number not in fave_numbers_1:
-            return False
-
-    return True
+def is_match(favNumbers1, favNumbers2):
+    setFaveNum1 = set(favNumbers1)
+    setFaveNum2 = set(favNumbers2)
+    return setFaveNum2.issubset(setFaveNum1)
