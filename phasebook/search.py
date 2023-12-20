@@ -1,7 +1,5 @@
 from flask import Blueprint, request
-
 from .data.search_data import USERS
-
 
 bp = Blueprint("search", __name__, url_prefix="/search")
 
@@ -12,19 +10,28 @@ def search():
 
 
 def search_users(args):
-    """Search users database
+    results = []
+    if "id" in args:
+        results += [user for user in USERS if user["id"] == args["id"]]
 
-    Parameters:
-        args: a dictionary containing the following search parameters:
-            id: string
-            name: string
-            age: string
-            occupation: string
+    if "name" in args:
+        results += [
+            user for user in USERS if args["name"].lower() in user["name"].lower()
+        ]
 
-    Returns:
-        a list of users that match the search parameters
-    """
+    if "age" in args:
+        results += [
+            user
+            for user in USERS
+            if int(args["age"]) - 1 <= user["age"] <= int(args["age"]) + 1
+        ]
 
-    # Implement search here!
+    if "occupation" in args:
+        results += [
+            user
+            for user in USERS
+            if args["occupation"].lower() in user["occupation"].lower()
+        ]
+    results = list({v["id"]: v for v in results}.values())
 
-    return USERS
+    return results
